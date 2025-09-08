@@ -32,7 +32,7 @@ async function get_names() {
     const agent = new HttpsProxyAgent(proxy);
     
     // 配置参数
-    const delayTime = 3000; // 3秒延迟（避免API限制）
+    const delayTime = 8000; // 8秒延迟（避免API限制）
     const saveInterval = 5; // 每获取5页保存一次
     let initialPage = 0; // 起始页码
     let fetchCount = 0; // 获取次数计数
@@ -56,18 +56,18 @@ async function get_names() {
             
             // 检查已有数据，确定起始页
             if (names.length > 0) {
-                initialPage = Math.floor(names.length / 100);
+                initialPage = Math.floor(names.length / 10);
                 console.log(`已有${names.length}个物品记录，从第${initialPage}页继续获取`);
             }
             
             // 分页获取物品
-            const totalPages = Math.ceil(total_names_count / 100);
+            const totalPages = Math.ceil(total_names_count / 10);
             
-            for (let i = 0; i <= totalPages; i++) {
+            for (let i = 0; i < totalPages; i++) {
                 try {
                     console.log(`获取第 ${i+1}/${totalPages} 页物品数据...`);
                     
-                    let response = await axios.get(`https://steamcommunity.com/market/search/render/?norender=1&query=&start=${100 * i}&count=100&search_descriptions=0&sort_column=name&sort_dir=asc&appid=${game_id}`, {
+                    let response = await axios.get(`https://steamcommunity.com/market/search/render/?norender=1&query=&start=${10 * i}&count=10&search_descriptions=0&sort_column=name&sort_dir=asc&appid=${game_id}`, {
                         httpsAgent: agent,
                         headers: {
                             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
@@ -120,8 +120,8 @@ async function get_names() {
                     console.log(`获取第 ${i+1} 页时出错: ${err.message}`);
                     
                     if (err.response && err.response.status === 429) {
-                        console.log('请求频率过高，Steam限制了访问，等待60秒...');
-                        await delay(60000);
+                        console.log('请求频率过高，Steam限制了访问，等待180秒...');
+                        await delay(180000);
                         i--; // 重试当前页
                         continue;
                     }

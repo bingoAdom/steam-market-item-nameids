@@ -67,7 +67,7 @@ async function get_ids() {
     const agent = new HttpsProxyAgent(proxy);
     
     // 配置参数
-    const delayTime = 2000; // 延迟时间（毫秒）
+    const delayTime = 6000; // 延迟时间（毫秒）
     const saveInterval = 10; // 减少保存间隔
     let processedCount = 0;
     let newIdsCount = 0;
@@ -133,8 +133,8 @@ async function get_ids() {
             failedItems.push(name);
             
             if (err.response && err.response.status === 429) {
-                console.log('请求过于频繁，Steam限制了访问，等待30秒...');
-                await delay(30000);
+                console.log('请求过于频繁，Steam限制了访问，等待180秒...');
+                await delay(180000);
                 continue; // 重试当前物品
             }
             
